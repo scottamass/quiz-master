@@ -19,9 +19,3 @@ export function isValidSessionCode(code) {
   if (typeof code !== 'string' || code.length !== CODE_LENGTH) return false
   return [...code].every((ch) => ALPHABET.includes(ch))
 }
-
-// The PeerJS peer ID is derived from the session code so contestants can
-// connect knowing only the code the host reads out.
-export function codeToPeerId(code) {
-  return `qm-${code}`
-}

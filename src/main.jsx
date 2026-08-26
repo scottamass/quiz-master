@@ -4,11 +4,10 @@ import App from './App.jsx'
 import './index.css'
 
 // NOTE: We deliberately do NOT wrap the app in <React.StrictMode>.
-// StrictMode double-invokes effects in dev (mount → unmount → mount), which
-// creates a PeerJS peer, tears it down mid-handshake, then creates another.
-// That kills the signaling WebSocket before it connects and can leave the
-// host/contestant hanging. WebRTC connection setup is not idempotent, so we
-// keep a single, stable mount.
+// StrictMode double-invokes effects in dev (mount → unmount → mount). Our
+// mount effects create a server session (host) and join it (contestant), which
+// are not idempotent — double-invoking would create a duplicate session and
+// spin up two polling loops. A single, stable mount keeps that clean.
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <App />
