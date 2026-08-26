@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "question": "What is the capital of France?",
+    "correct": "a",
+    "answers": { "a": "Paris", "b": "London", "c": "Berlin", "d": "Madrid" }
+  },
+  {
+    "id": 2,
+    "question": "Which planet is known as the Red Planet?",
+    "correct": "c",
+    "answers": { "a": "Venus", "b": "Jupiter", "c": "Mars", "d": "Saturn" }
+  },
+  {
+    "id": 3,
+    "question": "What is the largest mammal in the world?",
+    "correct": "b",
+    "answers": { "a": "African Elephant", "b": "Blue Whale", "c": "Giraffe", "d": "Polar Bear" }
+  },
+  {
+    "id": 4,
+    "question": "In which year did the first human land on the Moon?",
+    "correct": "d",
+    "answers": { "a": "1959", "b": "1963", "c": "1965", "d": "1969" }
+  },
+  {
+    "id": 5,
+    "question": "What is the chemical symbol for gold?",
+    "correct": "a",
+    "answers": { "a": "Au", "b": "Ag", "c": "Gd", "d": "Go" }
+  },
+  {
+    "id": 6,
+    "question": "Who painted the Mona Lisa?",
+    "correct": "c",
+    "answers": { "a": "Vincent van Gogh", "b": "Pablo Picasso", "c": "Leonardo da Vinci", "d": "Claude Monet" }
+  },
+  {
+    "id": 7,
+    "question": "How many continents are there on Earth?",
+    "correct": "b",
+    "answers": { "a": "5", "b": "7", "c": "6", "d": "8" }
+  },
+  {
+    "id": 8,
+    "question": "What is the smallest prime number?",
+    "correct": "a",
+    "answers": { "a": "2", "b": "1", "c": "3", "d": "0" }
+  },
+  {
+    "id": 9,
+    "question": "Which ocean is the largest by surface area?",
+    "correct": "d",
+    "answers": { "a": "Atlantic", "b": "Indian", "c": "Arctic", "d": "Pacific" }
+  },
+  {
+    "id": 10,
+    "question": "What language has the most native speakers worldwide?",
+    "correct": "c",
+    "answers": { "a": "English", "b": "Spanish", "c": "Mandarin Chinese", "d": "Hindi" }
+  },
+  {
+    "id": 11,
+    "question": "Which element has the atomic number 1?",
+    "correct": "a",
+    "answers": { "a": "Hydrogen", "b": "Helium", "c": "Oxygen", "d": "Carbon" }
+  },
+  {
+    "id": 12,
+    "question": "Who wrote the play 'Romeo and Juliet'?",
+    "correct": "b",
+    "answers": { "a": "Charles Dickens", "b": "William Shakespeare", "c": "Jane Austen", "d": "Mark Twain" }
+  },
+  {
+    "id": 13,
+    "question": "What is the hardest natural substance on Earth?",
+    "correct": "d",
+    "answers": { "a": "Quartz", "b": "Steel", "c": "Titanium", "d": "Diamond" }
+  },
+  {
+    "id": 14,
+    "question": "How many strings does a standard guitar have?",
+    "correct": "c",
+    "answers": { "a": "4", "b": "5", "c": "6", "d": "7" }
+  },
+  {
+    "id": 15,
+    "question": "Which country is home to the kangaroo?",
+    "correct": "a",
+    "answers": { "a": "Australia", "b": "South Africa", "c": "Brazil", "d": "India" }
+  }
+]
