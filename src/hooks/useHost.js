@@ -13,6 +13,11 @@ export const PHASE = {
 // How often the host polls for the player list / incoming answers.
 const POLL_MS = 1500
 
+// In batch reveal mode, answers are revealed once per this many questions
+// instead of after each one. Bundled (not server-driven) so host and contestant
+// agree on batch boundaries.
+export const BATCH_SIZE = 10
+
 // Host hook: creates a session on the server, then polls for players and
 // answers and drives the quiz forward via the API. The host's local state is
 // the source of truth for phase/index; the server just persists it.
@@ -25,6 +30,8 @@ export function useHost() {
   const [phase, setPhase] = useState(PHASE.LOBBY)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState({}) // { playerId: choice } for current question
+  const [answersByIndex, setAnswersByIndex] = useState({}) // { index: { playerId: choice } } — whole quiz
+  const [revealMode, setRevealMode] = useState('each') // 'each' | 'batch'
 
   const codeRef = useRef(null)
   const total = questions.length
@@ -72,6 +79,7 @@ export function useHost() {
           })),
         )
         setAnswers(state.answers || {})
+        setAnswersByIndex(state.answersByIndex || {})
       } catch {
         // Transient poll failure — keep going; the next tick may succeed.
       }
@@ -90,8 +98,14 @@ export function useHost() {
     setCurrentIndex(0)
     setAnswers({})
     setPhase(PHASE.QUESTION)
-    await hostUpdate(codeRef.current, { phase: PHASE.QUESTION, currentIndex: 0 })
-  }, [players.length])
+    // Persist the reveal mode so contestants know how to render reveals.
+    await hostUpdate(codeRef.current, {
+      phase: PHASE.QUESTION,
+      currentIndex: 0,
+      revealMode,
+      batchSize: BATCH_SIZE,
+    })
+  }, [players.length, revealMode])
 
   const revealAnswer = useCallback(async () => {
     const idx = currentIndex
@@ -110,6 +124,51 @@ export function useHost() {
     setPhase(PHASE.REVEALED)
     await hostUpdate(codeRef.current, { phase: PHASE.REVEALED, scores })
   }, [currentIndex, players, answers])
+
+  // Batch mode, QUESTION phase: "Next Question" simply OPENS the next question.
+  // It does not grade and does not clear answers — players can still go back and
+  // change any answer in the open range until the batch is revealed. At the
+  // batch boundary it grades the whole batch instead (see below).
+  const nextBatchQuestion = useCallback(async () => {
+    const idx = currentIndex
+    const isRevealPoint = (idx + 1) % BATCH_SIZE === 0 || idx === total - 1
+
+    if (!isRevealPoint) {
+      const next = idx + 1
+      setCurrentIndex(next)
+      setAnswers({})
+      setPhase(PHASE.QUESTION)
+      await hostUpdate(codeRef.current, { phase: PHASE.QUESTION, currentIndex: next })
+      return
+    }
+
+    // Reveal point: grade every question in this batch from the latest answers.
+    // Fetch fresh state first so a player's last-second edit isn't missed.
+    const start = Math.floor(idx / BATCH_SIZE) * BATCH_SIZE
+    let byIndex = answersByIndex
+    try {
+      const fresh = await fetchState(codeRef.current)
+      byIndex = fresh.answersByIndex || byIndex
+    } catch {
+      // Fall back to the last polled answers if the fetch fails.
+    }
+
+    // Start from the current cumulative scores (earlier batches already added)
+    // and add a point per correct answer across this batch.
+    const scores = {}
+    for (const p of players) scores[p.id] = p.score
+    for (let i = start; i <= idx; i++) {
+      const q = questions[i]
+      const qa = byIndex[i] || {}
+      for (const p of players) {
+        if (qa[p.id] === q.correct) scores[p.id] += 1
+      }
+    }
+
+    setPlayers((prev) => prev.map((p) => ({ ...p, score: scores[p.id] ?? p.score })))
+    setPhase(PHASE.REVEALED)
+    await hostUpdate(codeRef.current, { phase: PHASE.REVEALED, scores })
+  }, [currentIndex, players, answersByIndex, total])
 
   const finishQuiz = useCallback(async () => {
     setPhase(PHASE.FINISHED)
@@ -146,9 +205,15 @@ export function useHost() {
     answers,
     answerCount: Object.keys(answers).length,
     leaderboard: phase === PHASE.FINISHED ? buildLeaderboard() : [],
+    revealMode,
+    setRevealMode,
+    batchSize: BATCH_SIZE,
+    batchStartIndex: Math.floor(currentIndex / BATCH_SIZE) * BATCH_SIZE,
+    isRevealPoint: (currentIndex + 1) % BATCH_SIZE === 0 || currentIndex === total - 1,
     startQuiz,
     revealAnswer,
     nextQuestion,
+    nextBatchQuestion,
     finishQuiz,
   }
 }

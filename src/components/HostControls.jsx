@@ -6,12 +6,16 @@ export default function HostControls({
   playerCount,
   currentIndex,
   total,
+  revealMode = 'each',
+  isRevealPoint = false,
   onStart,
   onReveal,
+  onNextBatch,
   onNext,
   onFinish,
 }) {
   const isLast = currentIndex >= total - 1
+  const isBatch = revealMode === 'batch'
 
   if (phase === PHASE.LOBBY) {
     return (
@@ -22,6 +26,14 @@ export default function HostControls({
   }
 
   if (phase === PHASE.QUESTION) {
+    // Batch mode grades silently and only reveals at a batch boundary.
+    if (isBatch) {
+      return (
+        <button className="btn-primary w-full text-lg" onClick={onNextBatch}>
+          {isRevealPoint ? 'Reveal Answers' : 'Next Question'}
+        </button>
+      )
+    }
     return (
       <button className="btn-primary w-full text-lg" onClick={onReveal}>
         Reveal Answer
@@ -38,7 +50,7 @@ export default function HostControls({
           </button>
         ) : (
           <button className="btn-primary w-full text-lg" onClick={onNext}>
-            Next Question
+            {isBatch ? 'Continue' : 'Next Question'}
           </button>
         )}
       </div>

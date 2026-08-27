@@ -288,7 +288,7 @@
  {
     "id": 27, 
    "question": "Finish the lyric to the Seal song Kiss from a Rose: 'I compare you to a kiss from a rose on the ...'",
-    "correct": "B",
+    "correct": "b",
     "answers": {
       "a": "Grave",
       "b": "Grey",
@@ -299,7 +299,7 @@
   {
     "id": 28, 
     "question": "Which of these is not a Generation 1 Pokémon?",
-    "correct": "C",
+    "correct": "c",
     "answers": {
       "a": "Pikachu",
       "b": "Charizard",
@@ -310,7 +310,7 @@
   {
     "id": 29, 
     "question": "The song Greenback Boogie was there the theme song for which TV show?",
-    "correct": "D",
+    "correct": "d",
     "answers": {
       "a": "Heros",
       "b": "Breaking Bad",
@@ -321,7 +321,7 @@
   {
     "id": 30, 
     "question": "Which of these is not a type of pasta?",
-    "correct": "A",
+    "correct": "a",
     "answers": {
       "a": "Fettuccine",
       "b": "Penne",

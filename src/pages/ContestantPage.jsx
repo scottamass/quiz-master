@@ -4,6 +4,7 @@ import { PHASE } from '../hooks/useHost.js'
 import QuestionCard from '../components/QuestionCard.jsx'
 import AnswerChart from '../components/AnswerChart.jsx'
 import Scoreboard from '../components/Scoreboard.jsx'
+import BatchReview from '../components/BatchReview.jsx'
 
 export default function ContestantPage() {
   const { code } = useParams()
@@ -61,7 +62,44 @@ function Contestant({ code, name }) {
         </div>
       )}
 
-      {c.phase === PHASE.QUESTION && c.question && (
+      {c.phase === PHASE.QUESTION && c.question && c.canChange && (
+        <div className="card">
+          <QuestionCard
+            index={c.question.index}
+            total={c.question.total}
+            question={c.question.question}
+            answers={c.question.answers}
+            interactive
+            selected={c.myChoice}
+            onAnswer={c.submitAnswer}
+          />
+          <div className="mt-5 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              className="btn-ghost px-4 py-2 text-sm"
+              onClick={c.goPrev}
+              disabled={!c.canPrev}
+            >
+              ← Prev
+            </button>
+            <span className="text-center text-xs text-slate-500 dark:text-slate-400">
+              {c.myChoice ? 'Answer saved — tap another to change it' : 'Tap an answer'}
+              <br />
+              {c.openInBatch} of {c.batchSize} questions open
+            </span>
+            <button
+              type="button"
+              className="btn-ghost px-4 py-2 text-sm"
+              onClick={c.goNext}
+              disabled={!c.canNext}
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {c.phase === PHASE.QUESTION && c.question && !c.canChange && (
         <div className="card">
           <QuestionCard
             index={c.question.index}
@@ -77,6 +115,24 @@ function Contestant({ code, name }) {
             {c.myChoice
               ? 'Answer locked in! Waiting for the host to reveal…'
               : 'Tap your answer to lock it in.'}
+          </p>
+        </div>
+      )}
+
+      {c.phase === PHASE.REVEALED && c.batchReview && (
+        <div className="grid gap-6">
+          <div className="card text-center">
+            <h1 className="text-2xl font-extrabold">Here are the answers</h1>
+            <p className="mt-1 text-slate-500 dark:text-slate-400">
+              How you did on the last {c.batchReview.length}{' '}
+              {c.batchReview.length === 1 ? 'question' : 'questions'}.
+            </p>
+          </div>
+          <div className="card">
+            <BatchReview items={c.batchReview} total={c.question?.total} />
+          </div>
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+            Waiting for the next question…
           </p>
         </div>
       )}

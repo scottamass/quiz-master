@@ -79,16 +79,29 @@ async function submitAnswer(code, body) {
   if (!session) return json({ error: 'not_found' }, 404)
 
   const { playerId, questionIndex, choice } = body
-  // Only accept an answer for the live question, from a known player, once.
   if (session.phase !== 'question') return json({ error: 'not_accepting' }, 409)
-  if (questionIndex !== session.currentIndex) return json({ error: 'stale_question' }, 409)
   if (!session.players || !session.players[playerId]) return json({ error: 'unknown_player' }, 403)
   if (!['a', 'b', 'c', 'd'].includes(choice)) return json({ error: 'bad_choice' }, 400)
 
+  const currentIndex = session.currentIndex ?? 0
+  const isBatch = session.revealMode === 'batch'
+  if (isBatch) {
+    // Batch mode: accept (and overwrite) answers for any question already opened
+    // in the current batch, so players can go back and change their minds.
+    const batchSize = session.batchSize || 10
+    const start = Math.floor(currentIndex / batchSize) * batchSize
+    if (questionIndex < start || questionIndex > currentIndex) {
+      return json({ error: 'stale_question' }, 409)
+    }
+  } else {
+    // Per-question mode: only the live question, and only once.
+    if (questionIndex !== currentIndex) return json({ error: 'stale_question' }, 409)
+  }
+
   session.answers = session.answers || {}
   session.answers[questionIndex] = session.answers[questionIndex] || {}
-  if (session.answers[questionIndex][playerId]) {
-    return json({ ok: true, locked: true }) // already answered — ignore
+  if (!isBatch && session.answers[questionIndex][playerId]) {
+    return json({ ok: true, locked: true }) // per-question mode: first answer wins
   }
   session.answers[questionIndex][playerId] = choice
   await writeSession(code, session)
@@ -102,6 +115,11 @@ async function hostUpdate(code, body) {
 
   if (typeof body.phase === 'string') session.phase = body.phase
   if (Number.isInteger(body.currentIndex)) session.currentIndex = body.currentIndex
+
+  // Reveal mode is set once at start and read by contestants so they know how
+  // to render reveals (per-question vs. a batch of answers at once).
+  if (typeof body.revealMode === 'string') session.revealMode = body.revealMode
+  if (Number.isInteger(body.batchSize)) session.batchSize = body.batchSize
 
   // Scores are computed by the host (it knows the correct answers) and merged
   // in here. The host is the only writer of scores, so there is no race.

@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useHost, PHASE } from '../hooks/useHost.js'
+import questions from '../data/questions.json'
 import SessionCode from '../components/SessionCode.jsx'
 import PlayerList from '../components/PlayerList.jsx'
 import QuestionCard from '../components/QuestionCard.jsx'
 import AnswerChart from '../components/AnswerChart.jsx'
 import HostControls from '../components/HostControls.jsx'
 import Scoreboard from '../components/Scoreboard.jsx'
+import BatchReview from '../components/BatchReview.jsx'
+import RevealModeToggle from '../components/RevealModeToggle.jsx'
 
 export default function HostPage() {
   const host = useHost()
@@ -50,6 +53,9 @@ export default function HostPage() {
             <h2 className="mb-4 text-lg font-bold">Lobby</h2>
             <PlayerList players={host.players} />
           </div>
+          <div className="card">
+            <RevealModeToggle mode={host.revealMode} onChange={host.setRevealMode} />
+          </div>
           <HostControls
             phase={host.phase}
             playerCount={host.players.length}
@@ -84,12 +90,33 @@ export default function HostPage() {
             playerCount={host.players.length}
             currentIndex={host.currentIndex}
             total={host.total}
+            revealMode={host.revealMode}
+            isRevealPoint={host.isRevealPoint}
             onReveal={host.revealAnswer}
+            onNextBatch={host.nextBatchQuestion}
           />
         </div>
       )}
 
-      {host.phase === PHASE.REVEALED && (
+      {host.phase === PHASE.REVEALED && host.revealMode === 'batch' && (
+        <div className="grid gap-6">
+          <div className="card">
+            <h2 className="mb-4 text-lg font-bold">Answers</h2>
+            <BatchReview items={hostBatchItems(host)} total={host.total} />
+          </div>
+          <HostControls
+            phase={host.phase}
+            playerCount={host.players.length}
+            currentIndex={host.currentIndex}
+            total={host.total}
+            revealMode={host.revealMode}
+            onNext={host.nextQuestion}
+            onFinish={host.finishQuiz}
+          />
+        </div>
+      )}
+
+      {host.phase === PHASE.REVEALED && host.revealMode !== 'batch' && (
         <div className="grid gap-6">
           <div className="card">
             <QuestionCard
@@ -140,6 +167,17 @@ export default function HostPage() {
       )}
     </div>
   )
+}
+
+// The questions in the batch just revealed (host view — no per-player choice).
+function hostBatchItems(host) {
+  const items = []
+  for (let i = host.batchStartIndex; i <= host.currentIndex; i++) {
+    const q = questions[i]
+    if (!q) continue
+    items.push({ index: i, question: q.question, answers: q.answers, correct: q.correct, yourChoice: null })
+  }
+  return items
 }
 
 // Turn the { peerId: choice } map into { a, b, c, d } counts for the chart.

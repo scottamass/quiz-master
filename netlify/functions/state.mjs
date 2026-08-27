@@ -22,5 +22,11 @@ export default async (req) => {
     currentIndex,
     players: session.players || {},
     answers,
+    // Full per-question answer history. Needed in batch mode so the host can
+    // grade the whole batch at reveal and so a contestant can rehydrate its own
+    // picks after a refresh. Tiny at quiz scale (players × questions).
+    answersByIndex: session.answers || {},
+    revealMode: session.revealMode || 'each',
+    batchSize: session.batchSize || 10,
   })
 }
