@@ -3,7 +3,7 @@
 export default function PlayerList({ players, answers = null, showScores = false }) {
   if (players.length === 0) {
     return (
-      <p className="text-slate-400">No one has joined yet. Share the code above to get started.</p>
+      <p className="text-slate-500 dark:text-slate-400">No one has joined yet. Share the code above to get started.</p>
     )
   }
 
@@ -14,7 +14,7 @@ export default function PlayerList({ players, answers = null, showScores = false
         return (
           <li
             key={p.id}
-            className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-800/60 px-4 py-2.5"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-800/60"
           >
             <span className="font-medium">{p.name}</span>
             {answers ? (

@@ -4,7 +4,7 @@ const MEDALS = ['🥇', '🥈', '🥉']
 // highlights the current contestant's own row.
 export default function Scoreboard({ leaderboard, highlightName = null }) {
   if (!leaderboard || leaderboard.length === 0) {
-    return <p className="text-slate-400">No scores to show.</p>
+    return <p className="text-slate-500 dark:text-slate-400">No scores to show.</p>
   }
 
   return (
@@ -16,8 +16,8 @@ export default function Scoreboard({ leaderboard, highlightName = null }) {
             key={`${entry.name}-${i}`}
             className={`flex items-center justify-between rounded-xl border px-4 py-3 ${
               isMe
-                ? 'border-brand-400 bg-brand-600/20'
-                : 'border-slate-800 bg-slate-800/60'
+                ? 'border-brand-400 bg-brand-500/10 dark:bg-brand-600/20'
+                : 'border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/60'
             }`}
           >
             <span className="flex items-center gap-3">

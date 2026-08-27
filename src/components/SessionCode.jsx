@@ -16,11 +16,11 @@ export default function SessionCode({ code }) {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="mb-2 text-sm font-medium uppercase tracking-widest text-slate-400">
+      <p className="mb-2 text-sm font-medium uppercase tracking-widest text-slate-500 dark:text-slate-400">
         Session code
       </p>
       <div className="flex items-center gap-3">
-        <span className="font-mono text-5xl font-extrabold tracking-[0.2em] text-white sm:text-6xl">
+        <span className="font-mono text-5xl font-extrabold tracking-[0.2em] text-slate-900 dark:text-white sm:text-6xl">
           {code}
         </span>
         <button

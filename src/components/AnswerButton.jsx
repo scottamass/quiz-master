@@ -19,7 +19,8 @@ export default function AnswerButton({
   isCorrect = false,
   isChosen = false,
 }) {
-  let stateClasses = 'border-slate-700 bg-slate-800 hover:bg-slate-700'
+  let stateClasses =
+    'border-slate-300 bg-slate-50 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700'
 
   if (revealed) {
     if (isCorrect) {
@@ -27,10 +28,12 @@ export default function AnswerButton({
     } else if (isChosen) {
       stateClasses = 'border-rose-400 bg-rose-600/80 text-white'
     } else {
-      stateClasses = 'border-slate-800 bg-slate-800/50 opacity-60'
+      stateClasses =
+        'border-slate-200 bg-slate-100 opacity-60 dark:border-slate-800 dark:bg-slate-800/50'
     }
   } else if (selected) {
-    stateClasses = 'border-brand-400 bg-brand-600/30 ring-2 ring-brand-400'
+    stateClasses =
+      'border-brand-500 bg-brand-500/10 ring-2 ring-brand-400 dark:border-brand-400 dark:bg-brand-600/30'
   }
 
   return (

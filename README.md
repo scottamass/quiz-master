@@ -30,19 +30,31 @@ Functions live in `netlify/functions/`; shared helpers in `netlify/shared/`.
 
 ## Develop
 
-Plain Vite (UI only, no functions):
+Plain Vite runs the **whole app — UI and the realtime backend** — with no
+Netlify account or CLI. The Functions are served in-process by a dev plugin
+(`scripts/vite-api-plugin.mjs`) backed by an in-memory session store, so
+`create` / `join` / `answer` / `host` / `state` all work locally:
 
 ```bash
 npm install
 npm run dev            # http://localhost:5173
 ```
 
-Full stack locally (UI **and** functions **and** a local Blobs sandbox) needs
-the Netlify CLI:
+The dev server also binds to your LAN (`host: true`), so Vite prints a
+**Network** URL (e.g. `http://192.168.1.x:5173`). Open that on phones on the
+same Wi-Fi to host and join a real multi-device quiz — no deploy needed. The
+in-memory store lives in the dev process, so sessions reset when you restart it.
+
+> Same code path as production: the plugin invokes the actual
+> `netlify/functions/*.mjs` handlers — only the storage backend differs
+> (in-memory locally vs. Netlify Blobs in the cloud), selected by `QUIZ_STORE`.
+
+To test against a **real Blobs sandbox** (closest to production) with the
+Netlify CLI instead:
 
 ```bash
 npm i -g netlify-cli
-npm run dev:netlify    # http://localhost:8888  (use this to exercise the API)
+npm run dev:netlify    # http://localhost:8888
 ```
 
 ## Build & deploy

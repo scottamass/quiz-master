@@ -15,7 +15,7 @@ export default function ContestantPage() {
   if (!name) {
     return (
       <Centered>
-        <p className="mb-4 text-slate-300">You need to join with your name first.</p>
+        <p className="mb-4 text-slate-700 dark:text-slate-300">You need to join with your name first.</p>
         <Link to="/join" className="btn-primary">
           Go to Join
         </Link>
@@ -47,17 +47,17 @@ function Contestant({ code, name }) {
   return (
     <div className="mx-auto max-w-lg px-4 py-8">
       <header className="mb-6 flex items-center justify-between">
-        <span className="text-sm text-slate-400">
-          Playing as <span className="font-semibold text-slate-200">{name}</span>
+        <span className="text-sm text-slate-500 dark:text-slate-400">
+          Playing as <span className="font-semibold text-slate-900 dark:text-slate-200">{name}</span>
         </span>
-        <span className="font-mono text-sm tracking-widest text-slate-500">{code}</span>
+        <span className="font-mono text-sm tracking-widest text-slate-500 dark:text-slate-500">{code}</span>
       </header>
 
       {c.phase === PHASE.LOBBY && (
         <div className="card flex flex-col items-center gap-4 py-12 text-center">
           <span className="text-4xl">⏳</span>
           <h1 className="text-2xl font-bold">You're in!</h1>
-          <p className="text-slate-400">Waiting for the host to start the quiz…</p>
+          <p className="text-slate-500 dark:text-slate-400">Waiting for the host to start the quiz…</p>
         </div>
       )}
 
@@ -73,7 +73,7 @@ function Contestant({ code, name }) {
             disabled={Boolean(c.myChoice)}
             onAnswer={c.submitAnswer}
           />
-          <p className="mt-5 text-center text-sm text-slate-400">
+          <p className="mt-5 text-center text-sm text-slate-500 dark:text-slate-400">
             {c.myChoice
               ? 'Answer locked in! Waiting for the host to reveal…'
               : 'Tap your answer to lock it in.'}
@@ -91,7 +91,7 @@ function Contestant({ code, name }) {
             <h1 className="text-2xl font-extrabold">
               {c.revealData.wasCorrect ? '✅ Correct!' : c.myChoice ? '❌ Not quite' : '⏱ No answer'}
             </h1>
-            <p className="mt-1 text-slate-300">
+            <p className="mt-1 text-slate-600 dark:text-slate-300">
               Your score: <span className="font-bold text-brand-200">{c.revealData.yourScore} pts</span>
             </p>
           </div>
@@ -114,7 +114,7 @@ function Contestant({ code, name }) {
               correct={c.revealData.correct}
             />
           </div>
-          <p className="text-center text-sm text-slate-400">Waiting for the next question…</p>
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400">Waiting for the next question…</p>
         </div>
       )}
 
@@ -122,7 +122,7 @@ function Contestant({ code, name }) {
         <div className="grid gap-6">
           <div className="card text-center">
             <h1 className="mb-2 text-3xl font-extrabold">🏆 Final Scores</h1>
-            <p className="text-slate-400">Thanks for playing!</p>
+            <p className="text-slate-500 dark:text-slate-400">Thanks for playing!</p>
           </div>
           <div className="card">
             <Scoreboard leaderboard={c.leaderboard} highlightName={name} />

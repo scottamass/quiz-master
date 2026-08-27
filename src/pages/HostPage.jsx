@@ -18,7 +18,7 @@ export default function HostPage() {
     return (
       <Centered>
         <p className="mb-4 text-rose-400">Could not create a session.</p>
-        <p className="mb-6 text-sm text-slate-400">{host.error}</p>
+        <p className="mb-6 text-sm text-slate-500 dark:text-slate-400">{host.error}</p>
         <Link to="/" className="btn-ghost">
           Back home
         </Link>
@@ -29,10 +29,10 @@ export default function HostPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <header className="mb-6 flex items-center justify-between">
-        <Link to="/" className="text-sm text-slate-400 hover:text-slate-200">
+        <Link to="/" className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200">
           ← Quiz Master
         </Link>
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-slate-500 dark:text-slate-500">
           {host.players.length} {host.players.length === 1 ? 'player' : 'players'}
         </span>
       </header>
@@ -41,8 +41,8 @@ export default function HostPage() {
         <div className="grid gap-6">
           <div className="card flex flex-col items-center gap-6 py-8">
             <SessionCode code={host.sessionCode} />
-            <p className="text-center text-sm text-slate-400">
-              Players join at <span className="font-semibold text-slate-200">this site → Join a Quiz</span>{' '}
+            <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+              Players join at <span className="font-semibold text-slate-900 dark:text-slate-200">this site → Join a Quiz</span>{' '}
               and enter the code.
             </p>
           </div>
@@ -128,7 +128,7 @@ export default function HostPage() {
         <div className="grid gap-6">
           <div className="card text-center">
             <h1 className="mb-2 text-3xl font-extrabold">🏆 Final Scores</h1>
-            <p className="text-slate-400">Thanks for playing!</p>
+            <p className="text-slate-500 dark:text-slate-400">Thanks for playing!</p>
           </div>
           <div className="card">
             <Scoreboard leaderboard={host.leaderboard} />

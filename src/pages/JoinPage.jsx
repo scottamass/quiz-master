@@ -25,15 +25,15 @@ export default function JoinPage() {
 
   return (
     <div className="mx-auto flex min-h-full max-w-md flex-col justify-center px-4 py-12">
-      <Link to="/" className="mb-6 text-sm text-slate-400 hover:text-slate-200">
+      <Link to="/" className="mb-6 text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200">
         ← Back
       </Link>
       <h1 className="mb-1 text-3xl font-bold">Join a Quiz</h1>
-      <p className="mb-6 text-slate-400">Enter the code your host is showing.</p>
+      <p className="mb-6 text-slate-500 dark:text-slate-400">Enter the code your host is showing.</p>
 
       <form onSubmit={submit} className="card grid gap-4">
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-300">Session code</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Session code</label>
           <input
             className="input text-center font-mono text-2xl uppercase tracking-[0.3em]"
             placeholder="ABC123"
@@ -48,7 +48,7 @@ export default function JoinPage() {
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-slate-300">Your name</label>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Your name</label>
           <input
             className="input"
             placeholder="e.g. Alex"
