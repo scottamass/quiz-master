@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# SPA fallback so React Router deep links (e.g. /play/ABC123) resolve.
+# Function routes (/api/*) are matched before this by Netlify, so the API is
+# not affected by the catch-all.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
