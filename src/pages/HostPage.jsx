@@ -9,6 +9,7 @@ import HostControls from '../components/HostControls.jsx'
 import Scoreboard from '../components/Scoreboard.jsx'
 import BatchReview from '../components/BatchReview.jsx'
 import RevealModeToggle from '../components/RevealModeToggle.jsx'
+import JoinLink from '../components/JoinLink.jsx'
 
 export default function HostPage() {
   const host = useHost()
@@ -46,8 +47,9 @@ export default function HostPage() {
             <SessionCode code={host.sessionCode} />
             <p className="text-center text-sm text-slate-500 dark:text-slate-400">
               Players join at <span className="font-semibold text-slate-900 dark:text-slate-200">this site → Join a Quiz</span>{' '}
-              and enter the code.
+              and enter the code — or share the link below.
             </p>
+            <JoinLink code={host.sessionCode} />
           </div>
           <div className="card">
             <h2 className="mb-4 text-lg font-bold">Lobby</h2>

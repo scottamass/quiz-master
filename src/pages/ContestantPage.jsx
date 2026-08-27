@@ -17,7 +17,7 @@ export default function ContestantPage() {
     return (
       <Centered>
         <p className="mb-4 text-slate-700 dark:text-slate-300">You need to join with your name first.</p>
-        <Link to="/join" className="btn-primary">
+        <Link to={`/join?code=${code}`} className="btn-primary">
           Go to Join
         </Link>
       </Centered>

@@ -1,12 +1,22 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { normalizeSessionCode, isValidSessionCode } from '../lib/sessionCode.js'
 
 export default function JoinPage() {
   const navigate = useNavigate()
-  const [code, setCode] = useState('')
+  const [searchParams] = useSearchParams()
+  // A shared join link (e.g. /join?code=ABC123) prefills the code so players
+  // only have to enter their name.
+  const prefilledCode = normalizeSessionCode(searchParams.get('code') || '')
+  const [code, setCode] = useState(prefilledCode)
   const [name, setName] = useState('')
   const [error, setError] = useState(null)
+  const nameRef = useRef(null)
+
+  // If the code arrived in the URL, jump straight to the name field.
+  useEffect(() => {
+    if (isValidSessionCode(prefilledCode)) nameRef.current?.focus()
+  }, [prefilledCode])
 
   const submit = (e) => {
     e.preventDefault()
@@ -50,6 +60,7 @@ export default function JoinPage() {
         <div>
           <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Your name</label>
           <input
+            ref={nameRef}
             className="input"
             placeholder="e.g. Alex"
             value={name}
